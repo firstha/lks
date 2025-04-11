@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FileUploadController;
 
 
 Route::post('/register', [\App\Http\Controllers\Api\AuthController::class, 'register']);
@@ -14,3 +15,5 @@ Route::get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [\App\Http\Controllers\Api\AuthController::class, 'logout']);
 });
+
+Route::post('/upload', [FileUploadController::class, 'upload']);
