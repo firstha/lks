@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\API\V1\Game;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreGameRequest extends FormRequest
@@ -11,7 +12,7 @@ class StoreGameRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::check();
     }
 
     /**
@@ -22,7 +23,8 @@ class StoreGameRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => ['required', 'min:3', 'max:60', 'unique:games,title'],
+            'description' => ['required', 'min:0', 'max:200'],
         ];
     }
 }
