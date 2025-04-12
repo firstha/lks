@@ -15,56 +15,83 @@ class GameController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $page = $request->page;
+        $size = $request->size;
+        $sortBy = $request->sortBy;
+        $sortDir = $request->sortDir;
+
+        $games = Game::when($page, function ($query) use ($page, $size, $sortBy, $sortDir) {
+            return $query->orderBy($sortBy ?? 'id', $sortDir ?? 'asc')
+                ->paginate($size ?? 10);
+        }, function ($query) {
+            return $query->get();
+        });
+
+        return response()->json([
+            'totalElement' => $games->count(),
+            'konten' => $games,
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(StoreGameRequest $request)
     {
-        //
+        $slug = Str::slug($request->title);
+
+        $game = Game::create([
+            'slug' => Str::slug($request->title),
+            'title' => $request->title,
+            'description' => $request->description,
+            'created_by' => Auth::user()->id,
+        ]);
+
+        return response()->json([
+            'status' => 'berhasil',
+            'slug' => $slug,
+        ], 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show($slug)
     {
-        //
+        $game = Game::where('slug', $slug)->first();
+
+        if (!$game) {
+            return response()->json([
+                'status' => 'gagal',
+                'message' => 'Game tidak ditemukan',
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'berhasil',
+            'game' => $game,
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function upload(UploadGameRequest $request)
     {
-        //
-    }
+        $game = Game::where('slug', $request->slug)->first();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        if (!$game) {
+            return response()->json([
+                'status' => 'gagal',
+                'message' => 'Game tidak ditemukan',
+            ], 404);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        $file = $request->file('zipfile');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $path = $file->storeAs('games', $filename, 'public');
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $game->update([
+            'zipfile' => $path,
+        ]);
+
+        return response()->json([
+            'status' => 'berhasil',
+            'message' => 'File berhasil diupload',
+            'path' => $path,
+        ]);
     }
 }
