@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\NewAccessToken;
 use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 
-class PresonalAccessToken extends SanctumPersonalAccessToken
+class PersonalAccessToken extends SanctumPersonalAccessToken
     {
         /**
          * Create a new personal access token for the user.

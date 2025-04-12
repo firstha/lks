@@ -7,7 +7,7 @@ use App\Http\Requests\API\V1\Auth\SignInRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class SingInController extends Controller
+class SignInController extends Controller
 {
     /**
      * Display a listing of the resource.

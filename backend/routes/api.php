@@ -3,11 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileUploadController;
-use App\Http\Controllers\API\V1\UserController;
 use App\Http\Controllers\API\V1\GameController;
+use App\Http\Controllers\API\V1\UserController;
 use App\Http\Controllers\API\V1\AdminController;
-use App\Http\Controllers\API\V1\Auth\SignUpController;
 use App\Http\Controllers\API\V1\Auth\SignInController;
+use App\Http\Controllers\API\V1\Auth\SignUpController;
 use App\Http\Controllers\API\V1\Auth\SignOutController;
 
 Route::prefix('v1')->name('v1.')->group(function () {

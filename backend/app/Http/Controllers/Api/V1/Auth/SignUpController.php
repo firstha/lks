@@ -7,7 +7,7 @@ use App\Http\Requests\API\V1\Auth\SignUpRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class SingUpController extends Controller
+class SignUpController extends Controller
 {
     /**
      * Display a listing of the resource.
